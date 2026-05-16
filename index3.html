@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Negocio innovador con estilo llamativo y moderno." />
+  <title>Negocio Impacto</title>
+
+  <!-- Fuente y colores modernos -->
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --azul: #0077b6;
+      --violeta: #6a00f4;
+      --fondo: #f5f7fa;
+      --oscuro: #1a1a1a;
+    }
+
+    * {box-sizing: border-box; margin: 0; padding: 0;}
+
+    body {
+      font-family: 'Ubuntu', sans-serif;
+      background: var(--fondo);
+      color: var(--oscuro);
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: linear-gradient(90deg, var(--azul), var(--violeta));
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: auto;
+      padding: 16px 24px;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 24px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      opacity: 0.8;
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: #fff;
+      transition: 0.3s;
+    }
+
+    .menu-mobile {
+      position: fixed;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 80px 20px;
+      transition: 0.4s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .menu-mobile.open {
+      top: 0;
+    }
+
+    .menu-mobile a {
+      color: var(--azul);
+      font-size: 1.3rem;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .hero {
+      height: 100vh;
+      background: linear-gradient(135deg, var(--azul), var(--violeta));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: 0 20px;
+      background-image: url('https://images.unsplash.com/photo-1522199710521-72d69614c702?w=1600');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: auto;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background: #fff;
+      color: var(--violeta);
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: var(--violeta);
+      color: #fff;
+    }
+
+    section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: auto;
+      text-align: center;
+    }
+
+    h2 {
+      color: var(--azul);
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 16px;
+    }
+
+    footer {
+      background: linear-gradient(90deg, var(--azul), var(--violeta));
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .socials {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .socials a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25d366;
+      color: #fff;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 999;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .menu-toggle { display: flex; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="nav-container">
+      <div class="logo">Impacto</div>
+      <nav>
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#productos">Productos</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="menu-toggle" id="menu-toggle">
+        <div></div><div></div><div></div>
+      </div>
+    </div>
+    <div class="menu-mobile" id="menu-mobile">
+      <a href="#inicio">Inicio</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#productos">Productos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </header>
+
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+      <h1>Haz que tu marca brille</h1>
+      <p>Diseños únicos, presencia digital potente y soluciones modernas para tu negocio.</p>
+      <a href="#contacto" class="btn">Contáctanos</a>
+    </div>
+  </section>
+
+  <section id="servicios">
+    <h2>Servicios</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1556767576-cfba5b3b7f2c?w=800" alt="Servicio 1">
+        <div class="card-content">
+          <h3>Diseño Web</h3>
+          <p>Páginas modernas, optimizadas y con impacto visual.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1522199710521-72d69614c702?w=800" alt="Servicio 2">
+        <div class="card-content">
+          <h3>Marketing Digital</h3>
+          <p>Impulsa tu negocio con estrategias inteligentes y efectivas.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800" alt="Servicio 3">
+        <div class="card-content">
+          <h3>Branding</h3>
+          <p>Construye una identidad visual fuerte y memorable.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto">
+    <h2>Contáctanos</h2>
+    <p>Conéctate con nosotros en nuestras redes o escríbenos directamente.</p>
+    <div class="socials">
+      <a href="#">LinkedIn</a>
+      <a href="#">Instagram</a>
+      <a href="#">Facebook</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© <span id="year"></span> Impacto — Todos los derechos reservados</p>
+  </footer>
+
+  <a href="https://wa.me/5491112345678" class="whatsapp-btn" target="_blank" aria-label="WhatsApp">💬</a>
+
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuMobile = document.getElementById('menu-mobile');
+    menuToggle.addEventListener('click', () => {
+      menuMobile.classList.toggle('open');
+      document.body.style.overflow = menuMobile.classList.contains('open') ? 'hidden' : 'auto';
+      menuToggle.classList.toggle('active');
+    });
+    document.querySelectorAll('.menu-mobile a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuMobile.classList.remove('open');
+        document.body.style.overflow = 'auto';
+      });
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
