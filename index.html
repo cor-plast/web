@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- Google tag (gtag.js) -->
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-T178X96EJS"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-T178X96EJS');
+  // 1. Verificamos si ya se registró la vista en esta sesión de pestaña
+  if (!sessionStorage.getItem('page_viewed')) {
+    // Si no existe, enviamos la configuración (que dispara el page_view)
+    gtag('config', 'G-T178X96EJS');
+    
+    // Guardamos la marca para saber que ya se contó
+    sessionStorage.setItem('page_viewed', 'true');
+  } else {
+    // Si ya existe (es un F5), inicializamos GA4 pero desactivamos el envío automático de la vista
+    gtag('config', 'G-T178X96EJS', { 'send_page_view': false });
+  }
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
