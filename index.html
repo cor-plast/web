@@ -210,19 +210,12 @@
       display: flex;
     }
 
-    /*.modal-backdrop {
+    .modal-backdrop {
       position: absolute;
       inset: 0;
       background: rgba(0, 0, 0, 0.82);
       backdrop-filter: blur(12px) saturate(140%);
       animation: fadeBackdrop .35s ease forwards;
-    }*/
-
-    .modal-backdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.82);
-      backdrop-filter: none;
     }
 
     @keyframes fadeBackdrop {
@@ -256,21 +249,6 @@
       background: #111;
       overflow: hidden;
     }
-
-    
-#modalVideo {
-  width: 100%;
-  max-height: 72vh;
-  display: none;
-  background: #111;
-}
-
-@media (max-width: 700px) {
-  #modalVideo {
-    max-height: 60vh;
-  }
-}
-
 
     .modal-content img {
       width: 100%;
@@ -390,6 +368,48 @@
     .prev-btn { left: 18px; }
     .next-btn { right: 18px; }
 
+
+    .thumbnails{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:15px 20px;
+      background:#141414;
+      border-top:1px solid rgba(255,255,255,.05);
+    }
+
+    .thumbnail{
+      width:60px;
+      height:60px;
+      border-radius:10px;
+      overflow:hidden;
+      cursor:pointer;
+      border:2px solid transparent;
+      opacity:.7;
+      transition:.25s;
+    }
+
+    .thumbnail img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      opacity:1 !important;
+    }
+
+    .thumbnail:hover{
+      opacity:1;
+      transform:scale(1.08);
+    }
+
+    .thumbnail.active{
+      opacity:1;
+      border-color:#d61f2c;
+    }
+
+
     /* ===== FLOATING WHATSAPP ===== */
     .whatsapp {
       position: fixed;
@@ -468,6 +488,11 @@
         width: 25px;
         height: 25px;
       }
+
+      .thumbnail{
+      width:30px;
+      height:30px;
+      }
     }
   </style>
 </head>
@@ -508,11 +533,10 @@
           <i class="fa-solid fa-chevron-right"></i>
         </button>
 
-        <div class="dots" id="dots"></div>
-
         <img id="modalImage" src="" alt="Imagen ampliada">
-        <video id="modalVideo" controls playsinline preload="auto" style="display:none;"></video>
       </div>
+
+      <div class="thumbnails" id="dots"></div>
 
       <div class="modal-description">
         <h3 id="modalTitle">Título</h3>
@@ -537,12 +561,12 @@
     const photos = {
       Turismo: [
         {
-          images: ["img/webp/a-01.webp", "img/webp/a-02.webp", "img/webp/a-03.webp", "img/webp/a-04.webp", "img/webp/a-05.webp"/*, "video/b-01.mp4"*/],
+          images: ["img/webp/a-01.webp", "img/webp/a-02.webp", "img/webp/a-03.webp", "img/webp/a-04.webp", "img/webp/a-05.webp", "video/b-01.mp4"],
           title: "Sobre Doble",
           text: "Medida 13 x 26 cm"
         },
         {
-          images: ["img/webp/b-01.webp", "img/webp/b-02.webp", "img/webp/b-03.webp", "img/webp/b-04.webp", "img/webp/b-05.webp", "img/webp/b-06.webp"],
+          images: ["img/webp/b-01.webp", "img/webp/b-02.webp", "img/webp/b-03.webp", "img/webp/b-04.webp"],
           title: "Sobre Triptico",
           text: "Medida 15 x 25 cm"
         },
@@ -631,7 +655,6 @@
     const gallery = document.getElementById("gallery");
     const modal = document.getElementById("imageModal");
     const modalImage = document.getElementById("modalImage");
-    const modalVideo = document.getElementById("modalVideo");
     const modalTitle = document.getElementById("modalTitle");
     const modalText = document.getElementById("modalText");
     const counter = document.getElementById("counter");
@@ -699,7 +722,6 @@
       modal.classList.remove("active");
       modal.setAttribute("aria-hidden", "true");
       document.body.classList.remove("modal-open");
-      modalVideo.pause();
 
       if (modalOpenedFromHistory && !fromPopState) {
         history.back();
@@ -720,33 +742,7 @@
         modalImage.style.opacity = "1";
       };
 
-      
-      const currentFile = item.images[currentInnerIndex];
-
-      const isVideo =
-        currentFile.toLowerCase().endsWith(".mp4") ||
-        currentFile.toLowerCase().endsWith(".webm") ||
-        currentFile.toLowerCase().endsWith(".mov");
-
-      if (isVideo) {
-
-        modalImage.style.display = "none";
-
-        modalVideo.style.display = "block";
-        modalVideo.src = currentFile;
-
-      } else {
-
-        modalVideo.pause();
-        modalVideo.style.display = "none";
-        modalVideo.removeAttribute("src");
-        modalVideo.load();
-
-        modalImage.style.display = "block";
-        modalImage.src = currentFile;
-
-      }
-
+      modalImage.src = item.images[currentInnerIndex];
       modalTitle.textContent = item.title;
       modalText.textContent = item.text || "";
       counter.textContent = `${currentInnerIndex + 1} / ${item.images.length}`;
@@ -762,18 +758,24 @@
       const item = photos[currentCategory][currentIndex];
       dotsContainer.innerHTML = "";
 
-      if (item.images.length <= 1) return; // No renderizar si hay solo una imagen
+      if (item.images.length <= 1) return;
 
-      item.images.forEach((_, index) => {
-        const dot = document.createElement("div");
-        dot.classList.add("dot");
-        if (index === currentInnerIndex) dot.classList.add("active");
+      item.images.forEach((image, index) => {
+        const thumb = document.createElement("div");
+        thumb.classList.add("thumbnail");
 
-        dot.addEventListener("click", () => {
+        if (index === currentInnerIndex) {
+          thumb.classList.add("active");
+        }
+
+        thumb.innerHTML = `<img src="${image}" alt="Miniatura ${index + 1}">`;
+
+        thumb.addEventListener("click", () => {
           currentInnerIndex = index;
           updateModal();
         });
-        dotsContainer.appendChild(dot);
+
+        dotsContainer.appendChild(thumb);
       });
     }
 
