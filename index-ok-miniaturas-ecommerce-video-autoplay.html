@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T178X96EJS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // 1. Verificamos si ya se registró la vista en esta sesión de pestaña
+  if (!sessionStorage.getItem('page_viewed')) {
+    // Si no existe, enviamos la configuración (que dispara el page_view)
+    gtag('config', 'G-T178X96EJS');
+    
+    // Guardamos la marca para saber que ya se contó
+    sessionStorage.setItem('page_viewed', 'true');
+  } else {
+    // Si ya existe (es un F5), inicializamos GA4 pero desactivamos el envío automático de la vista
+    gtag('config', 'G-T178X96EJS', { 'send_page_view': false });
+  }
+</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COR-PLAST | Publicidad</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="icon" href="img/favicon.png" type="image/x-icon">
+
+  <style>
+    /* ===== VARIABLES Y CONFIGURACIÓN ===== */
+    :root {
+      --primary-color: #d61f2c;
+      --bg-dark: #0b0b0b;
+      --bg-card: #171717;
+      --bg-modal: #141414;
+      --text-main: white;
+      --text-muted: #9f9f9f;
+      --text-description: #cfcfcf;
+      --border-soft: rgba(255, 255, 255, 0.05);
+      --radius-lg: 24px;
+      --radius-xl: 34px;
+      --transition-smooth: 0.35s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg-dark);
+      color: white;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      width: 100%;
+      padding: 28px 20px;
+      text-align: center;
+      background: rgba(10, 10, 10, 0.82);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .logo {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo img {
+      width: 100%;
+      max-width: 460px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .leyenda {
+      padding: 10px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: clamp(1rem, 4vw, 2rem);
+      line-height: 1.9;
+    }
+
+    /* ===== BOTONES DE FILTRO ===== */
+    .menu {
+      width: 100%;
+      max-width: 760px;
+      margin: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .menu button {
+      flex: 1;
+      min-width: 140px;
+      background: var(--bg-card);
+      color: white;
+      border: 1px solid #2b2b2b;
+      padding: 14px 22px;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: var(--transition-smooth);
+      font-weight: 500;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .menu button:hover, 
+    .menu button.active {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .menu button:hover {
+      transform: translateY(-2px);
+    }
+
+    /* ===== GALERÍA MAIN ===== */
+    .gallery {
+      width: 100%;
+      max-width: 1500px;
+      margin: auto;
+      padding: 26px 18px 90px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      aspect-ratio: 1 / 1;
+      cursor: pointer;
+      transition: 0.45s ease;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.32);
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 0.55s ease;
+      will-change: transform;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.08);
+      opacity: 0.88;
+    }
+
+    .gallery-item::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(214, 31, 44, 0.22), transparent);
+      opacity: 0;
+      transition: 0.4s ease;
+    }
+
+    .gallery-item:hover::after {
+      opacity: 1;
+    }
+
+    /* ===== MODAL / LIGHTBOX ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100dvh;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 5000;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+    }
+
+    @keyframes fadeBackdrop {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      position: relative;
+      width: 40vw;
+      max-width: 760px;
+      min-width: 420px;
+      z-index: 5;
+      animation: modalIn .35s ease forwards;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(.94);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-image-wrapper {
+      position: relative;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      background: #111;
+      overflow: hidden;
+    }
+
+    #modalImage {
+      width: 100%;
+      max-height: 72vh;
+      object-fit: contain;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      background: #111;
+    }
+
+    #modalVideo {
+      width: 100%;
+      max-height: 72vh;
+      display: none;
+      background: #111;
+    }
+
+    /* ===== INFO MODAL ===== */
+    .modal-description {
+      background: var(--bg-modal);
+      padding: 28px;
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .modal-description h3 {
+      color: var(--text-description);
+      font-size: 24px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .modal-description p {
+      color: var(--text-description);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    /* ===== CONTROLES DEL MODAL ===== */
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 40;
+      box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.35);
+      transition: var(--transition-smooth);
+    }
+
+    .close-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .counter {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-size: 13px;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+    }
+
+    .dots {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 20;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .dot:hover {
+      transform: scale(1.15);
+    }
+
+    .dot.active {
+      background: var(--primary-color);
+      transform: scale(1.35);
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.38);
+      color: white;
+      cursor: pointer;
+      z-index: 25;
+      font-size: 18px;
+      backdrop-filter: blur(10px);
+      transition: var(--transition-smooth);
+    }
+
+    .nav-btn:hover {
+      background: var(--primary-color);
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .prev-btn { left: 18px; }
+    .next-btn { right: 18px; }
+
+
+    .thumbnails{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:15px 20px;
+      background:#141414;
+      border-top:1px solid rgba(255,255,255,.05);
+    }
+
+    .thumbnail{
+      width:60px;
+      height:60px;
+      border-radius:10px;
+      overflow:hidden;
+      cursor:pointer;
+      border:2px solid transparent;
+      opacity:.7;
+      transition:.25s;
+    }
+
+    .thumbnail img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      opacity:1 !important;
+      background:#111;
+    }
+
+    .thumbnail:hover{
+      opacity:1;
+      transform:scale(1.08);
+    }
+
+    .thumbnail.active{
+      opacity:1;
+      border-color:#d61f2c;
+    }
+
+    .thumbnail.video-thumbnail{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#111;
+      color:white;
+    }
+
+    .thumbnail.video-thumbnail i{
+      font-size:22px;
+      opacity:.95;
+    }
+
+
+    /* ===== FLOATING WHATSAPP ===== */
+    .whatsapp {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 64px;
+      height: 64px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 31px;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      z-index: 999;
+      transition: var(--transition-smooth);
+    }
+
+    .whatsapp:hover {
+      transform: scale(1.1);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #111;
+      border-top: 1px solid var(--border-soft);
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    footer strong {
+      color: var(--primary-color);
+    }
+
+    /* ===== MEDIA QUERIES ===== */
+    @media (max-width: 1000px) {
+      .modal-content {
+        width: 62vw;
+        min-width: auto;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-btn { display: none; }
+      header { padding: 24px 16px; }
+      .logo img { max-width: 320px; }
+      .menu { gap: 10px; }
+      
+      .menu button {
+        min-width: unset;
+        width: 48%;
+        font-size: 13px;
+        padding: 12px;
+      }
+
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 18px 12px 90px;
+      }
+
+      .modal { padding: 12px; }
+      .modal-content { width: 100%; max-width: none; }
+      #modalImage,
+      #modalVideo { max-height: 60vh; }
+      .modal-description { padding: 22px; }
+      .modal-description h3 { font-size: 20px; }
+      
+      .close-btn {
+        top: 15px;
+        right: 15px;
+        width: 25px;
+        height: 25px;
+      }
+
+      .thumbnail{
+      width:30px;
+      height:30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+  <div class="logo">
+      <img src="svg/logo-2026.svg" alt="COR-PLAST Publicidad">
+  </div>
+    <div class="leyenda">
+      <p>Porta Vouchers | Porta Documentos</p>
+    </div>
+    <nav class="menu">
+      <button aria-label="Turismo" class="active" onclick="changeCategory('Turismo', this)">Turismo</button>
+      <button aria-label="Automotor" onclick="changeCategory('Automotor', this)">Automotor</button>
+      <button aria-label="Otros" onclick="changeCategory('Otros', this)">Otros</button>
+    </nav>
+  </header>
+
+  <main class="gallery" id="gallery"></main>
+
+  <div class="modal" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-backdrop" onclick="closeModal()"></div>
+    
+    <div class="modal-content">
+      <button aria-label="Cerrar ventana" class="close-btn" onclick="closeModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="modal-image-wrapper">
+        <div class="counter" id="counter">1 / 1</div>
+
+        <button aria-label="Imagen anterior" class="nav-btn prev-btn" onclick="prevImage()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button aria-label="Imagen siguiente" class="nav-btn next-btn" onclick="nextImage()">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <img id="modalImage" src="" alt="Imagen ampliada">
+        <video id="modalVideo" controls playsinline preload="auto" muted></video>
+      </div>
+
+      <div class="thumbnails" id="dots"></div>
+
+      <div class="modal-description">
+        <h3 id="modalTitle">Título</h3>
+        <p id="modalText">Descripción</p>
+      </div>
+    </div>
+  </div>
+
+  <a class="whatsapp" href="https://wa.me/5493513850421" target="_blank" rel="noopener noreferrer" aria-label="Contacto por WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <footer>
+    <p><strong>COR-PLAST | Publicidad</strong></p>
+    <p>Porta Vouchers | Porta Documentos</p>
+    <p>351 385 0421</p>
+    <p>Córdoba, Argentina.</p>
+  </footer>
+
+  <script>
+    /* ===== DATABASE DATA ===== */
+    const photos = {
+      Turismo: [
+        {
+          images: ["img/webp/a-01.webp", "img/webp/a-02.webp", "img/webp/a-03.webp", "img/webp/a-04.webp", "img/webp/a-05.webp","video/b-01.mp4"],
+          title: "Sobre Doble",
+          text: "Medida 13 x 26 cm"
+        },
+        {
+          images: ["img/webp/b-01.webp", "img/webp/b-02.webp", "img/webp/b-03.webp", "img/webp/b-04.webp"],
+          title: "Sobre Triptico",
+          text: "Medida 15 x 25 cm"
+        },
+        {
+          images: ["img/webp/c-01.webp", "img/webp/c-02.webp", "img/webp/c-03.webp"],
+          title: "Sobre Solapa 2 broches",
+          text: "Medida 17 x 26,5 cm"
+        },
+        {
+          images: ["img/webp/d-01.webp", "img/webp/d-02.webp", "img/webp/d-03.webp"],
+          title: "Sobre Doble solapa inclinada",
+          text: "Medida 13 x 26 cm"
+        },
+        {
+          images: ["img/webp/h-01.webp", "img/webp/h-02.webp"],
+          title: "Sobre Solapa 1 broche",
+          text: "Medida 16 x 26 cm"
+        },
+        {
+          images: ["img/webp/i-01.webp", "img/webp/i-02.webp", "img/webp/i-03.webp"],
+          title: "Sobre Simple",
+          text: "Medida 13 x 25 cm"
+        },
+        {
+          images: ["img/webp/g-02.webp", "img/webp/g-01.webp"],
+          title: "Marbete Valijero",
+          text: "Medida 24 x 7 cm"
+        },
+        {
+          images: ["img/webp/logo-clientes.webp"]
+        }
+      ],
+      Automotor: [
+        {
+          images: ["img/webp/e-01.webp", "img/webp/e-02.webp", "img/webp/e-03.webp"],
+          title: "Sobre Porta Manual grande",
+          text: "Medida 17 x 24 cm"
+        },
+        {
+          images: ["img/webp/f-01.webp", "img/webp/f-02.webp", "img/webp/f-03.webp"],
+          title: "Sobre Porta Manual chico",
+          text: "Medida 13 x 23 cm"
+        },
+        {
+          images: ["img/webp/j-01.webp", "img/webp/j-02.webp"],
+          title: "Sobre Solapa A4",
+          text: "Medida 30 x 23 cm"
+        },
+        {
+          images: ["img/webp/k-01.webp", "img/webp/k-02.webp", "img/webp/k-03.webp"],
+          title: "Sobre Porta Manual c/ Lomo y Fuelle",
+          text: "Medida 16 x 24,5 x 7 cm"
+        },
+        {
+          images: ["img/webp/logo-clientes.webp"]
+        }
+      ],
+      Otros: [
+        {
+          images: ["img/webp/v-01.webp", "img/webp/v-02.webp", "img/webp/v-03.webp"],
+          title: "Porta Tarjeta doble vertical",
+          text: "6,5 x 9,5 cm"
+        },
+        {
+          images: ["img/webp/v-04.webp"],
+          title: "Porta Tarjeta doble horizontal",
+          text: "8 x 11,5 cm"
+        },
+        {
+          images: ["img/webp/v-05.webp", "img/webp/v-06.webp"],
+          title: "Billetera",
+          text: "17,5 x 8,5 cm"
+        },
+        {
+          images: ["img/webp/v-07.webp"],
+          title: "Fundas Libreta",
+          text: ""
+        },
+        {
+          images: ["img/webp/logo-clientes.webp"]
+        }
+      ]
+    };
+
+    /* ===== DOM ELEMENTS ===== */
+    const gallery = document.getElementById("gallery");
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    const modalVideo = document.getElementById("modalVideo");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalText = document.getElementById("modalText");
+    const counter = document.getElementById("counter");
+    const dotsContainer = document.getElementById("dots");
+    const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+    /* ===== APP STATE ===== */
+    let currentCategory = "Turismo";
+    let currentIndex = 0;
+    let currentInnerIndex = 0;
+    let modalOpenedFromHistory = false;
+
+    /* ===== RENDER GALLERY ===== */
+    function loadPhotos(category) {
+      currentCategory = category;
+      gallery.innerHTML = "";
+
+      if (!photos[category]) return;
+
+      photos[category].forEach((photo, index) => {
+        const div = document.createElement("div");
+        div.classList.add("gallery-item");
+
+        div.innerHTML = `
+          <img
+            src="${photo.images[0]}"
+            alt="${photo.title}"
+            loading="lazy"
+            decoding="async"
+          >
+        `;
+
+        div.addEventListener("click", () => openModal(index));
+        gallery.appendChild(div);
+      });
+    }
+
+    /* ===== MODAL LOGIC ===== */
+    function openModal(index) {
+      currentIndex = index;
+      currentInnerIndex = 0;
+
+      updateModal();
+      modal.classList.add("active");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+
+      if (!modalOpenedFromHistory) {
+        history.pushState({
+          modal: true,
+          category: currentCategory,
+          index: currentIndex,
+          image: currentInnerIndex
+        }, "");
+        modalOpenedFromHistory = true;
+      }
+
+      const focusable = modal.querySelectorAll(focusableSelectors);
+      if (focusable.length) {
+        setTimeout(() => focusable[0].focus(), 50);
+      }
+    }
+
+    function closeModal(fromPopState = false) {
+      modal.classList.remove("active");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+
+      modalVideo.pause();
+      modalVideo.onloadeddata = null;
+      modalVideo.onended = null;
+      modalVideo.removeAttribute("src");
+      modalVideo.load();
+
+      if (modalOpenedFromHistory && !fromPopState) {
+        history.back();
+      }
+      modalOpenedFromHistory = false;
+    }
+
+    /* ===== UPDATE MODAL CONTENT ===== */
+    function isVideoFile(file) {
+      return file.toLowerCase().endsWith(".mp4") ||
+             file.toLowerCase().endsWith(".webm") ||
+             file.toLowerCase().endsWith(".mov");
+    }
+
+    function updateModal() {
+      const item = photos[currentCategory][currentIndex];
+      if (!item) return;
+
+      const preload = new Image();
+      const currentFile = item.images[currentInnerIndex];
+
+      modalImage.style.opacity = "0";
+
+      if (isVideoFile(currentFile)) {
+        modalImage.style.display = "none";
+        modalImage.removeAttribute("src");
+
+        modalVideo.pause();
+        modalVideo.currentTime = 0;
+        modalVideo.style.display = "block";
+        modalVideo.src = currentFile;
+        modalVideo.autoplay = true;
+        modalVideo.loop = false;
+        modalVideo.muted = true;
+        modalVideo.load();
+
+        modalVideo.onloadeddata = () => {
+          modalVideo.play().catch(() => {
+            // Si el navegador bloquea el autoplay, quedan disponibles los controles.
+          });
+        };
+
+        modalVideo.onended = () => {
+          modalVideo.pause();
+          modalVideo.currentTime = modalVideo.duration;
+        };
+      } else {
+        modalVideo.pause();
+        modalVideo.onloadeddata = null;
+        modalVideo.onended = null;
+        modalVideo.style.display = "none";
+        modalVideo.removeAttribute("src");
+        modalVideo.load();
+
+        modalImage.style.display = "block";
+
+        modalImage.onload = () => {
+          modalImage.style.opacity = "1";
+        };
+
+        modalImage.src = currentFile;
+
+        // Preload de la siguiente imagen solo si no es video
+        const nextIndex = (currentInnerIndex + 1) % item.images.length;
+        const nextFile = item.images[nextIndex];
+        if (!isVideoFile(nextFile)) {
+          preload.src = nextFile;
+        }
+      }
+
+      modalTitle.textContent = item.title;
+      modalText.textContent = item.text || "";
+      counter.textContent = `${currentInnerIndex + 1} / ${item.images.length}`;
+
+      renderDots();
+    }
+
+    function renderDots() {
+      const item = photos[currentCategory][currentIndex];
+      dotsContainer.innerHTML = "";
+
+      if (item.images.length <= 1) return;
+
+      item.images.forEach((file, index) => {
+        const thumb = document.createElement("div");
+        thumb.classList.add("thumbnail");
+
+        if (isVideoFile(file)) {
+          thumb.classList.add("video-thumbnail");
+          thumb.innerHTML = `<i class="fa-solid fa-play"></i>`;
+          thumb.setAttribute("aria-label", `Video ${index + 1}`);
+        } else {
+          thumb.innerHTML = `<img src="${file}" alt="Miniatura ${index + 1}">`;
+        }
+
+        if (index === currentInnerIndex) {
+          thumb.classList.add("active");
+        }
+
+        thumb.addEventListener("click", () => {
+          currentInnerIndex = index;
+          updateModal();
+        });
+
+        dotsContainer.appendChild(thumb);
+      });
+    }
+
+    function nextImage() {
+      const item = photos[currentCategory][currentIndex];
+      currentInnerIndex = (currentInnerIndex + 1) % item.images.length;
+      updateModal();
+    }
+
+    function prevImage() {
+      const item = photos[currentCategory][currentIndex];
+      currentInnerIndex = (currentInnerIndex - 1 + item.images.length) % item.images.length;
+      updateModal();
+    }
+
+    /* ===== KEYBOARD NAVIGATION & ACCESSIBILITY ===== */
+    modal.addEventListener("keydown", e => {
+      if (!modal.classList.contains("active")) return;
+      if (e.key !== "Tab") return;
+
+      const focusable = modal.querySelectorAll(focusableSelectors);
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    document.addEventListener("keydown", e => {
+      if (!modal.classList.contains("active")) return;
+      if (e.key === "Escape") closeModal();
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
+    });
+
+    window.addEventListener("popstate", () => {
+      if (modal.classList.contains("active")) {
+        closeModal(true);
+      }
+    });
+
+    /* ===== TOUCH SWIPE ACTIONS ===== */
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    modal.addEventListener("touchstart", e => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    modal.addEventListener("touchend", e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50) nextImage();
+      if (touchEndX > touchStartX + 50) prevImage();
+    }
+
+    /* ===== CATEGORY INTERACTION ===== */
+    function changeCategory(category, button) {
+      document.querySelectorAll(".menu button").forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+      loadPhotos(category);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /* ===== INITIALIZATION ===== */
+    document.addEventListener("DOMContentLoaded", () => {
+      loadPhotos("Turismo");
+    });
+  </script>
+</body>
+</html>
