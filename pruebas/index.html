@@ -704,10 +704,10 @@
 
   <script>
     /* ===== DATABASE DATA ===== */
-    const photos = {
+   const photos = {
       Turismo: [
         {
-          images: ["img/webp/a-01.webp", "img/webp/a-02.webp", "img/webp/a-03.webp", "img/webp/a-04.webp", "img/webp/a-05.webp","video/b-01.mp4"],
+          images: ["img/webp/a-01.webp", "img/webp/a-02.webp", "img/webp/a-03.webp", "img/webp/a-04.webp", "img/webp/a-05.webp" /*,"video/b-01.mp4"*/],
           title: "Sobre Doble",
           text: "Medida 13 x 26 cm"
         },
@@ -742,7 +742,8 @@
           text: "Medida 24 x 7 cm"
         },
         {
-          images: ["img/webp/logo-clientes.webp"]
+          images: ["img/webp/logo-clientes.webp"],
+          title: "Clientes"
         }
       ],
       Automotor: [
@@ -767,7 +768,8 @@
           text: "Medida 16 x 24,5 x 7 cm"
         },
         {
-          images: ["img/webp/logo-clientes.webp"]
+          images: ["img/webp/logo-clientes.webp"],
+          title: "Clientes"
         }
       ],
       Otros: [
@@ -792,11 +794,11 @@
           text: ""
         },
         {
-          images: ["img/webp/logo-clientes.webp"]
+          images: ["img/webp/logo-clientes.webp"],
+          title: "Clientes"
         }
       ]
     };
-
     /* ===== DOM ELEMENTS ===== */
     const gallery = document.getElementById("gallery");
     const modal = document.getElementById("imageModal");
